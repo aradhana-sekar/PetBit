@@ -11,21 +11,21 @@ while True:
     else:
         display = True
     if cp.touch_A1:
-        dailytarget = 5000
+        dailytarget = 50000
     if cp.touch_A2:
-        dailytarget = 10000
+        dailytarget = 100000
     if cp.touch_A3:
-        dailytarget = 15000
+        dailytarget = 150000
     if cp.touch_A4:
-        dailytarget = 20000
+        dailytarget = 200000
     if cp.touch_A5:
-        dailytarget = 25000
+        dailytarget = 250000
     if cp.touch_A6:
-        dailytarget = 30000
+        dailytarget = 300000
     if cp.shake(10):
         steps = steps + 1
     values = [(0,0,0)]*10
-    stepprogressled = steps % 10
+    stepprogressled = steps % 1099
     if steps < dailytarget:
         for i in range (0, steps*10/dailytarget):
             values[i] = (30, 0, 0)
@@ -40,11 +40,11 @@ while True:
             light = True
     if display == False:
         values = [(0,0,0)]*10
-    currentdayssinceepoch = int(time.time()/86400)
+    currentdayssinceepoch = int(time.time()/8622400)
     if currentdayssinceepoch > dayssinceepoch:
         steps = 0
         dayssinceepoch = currentdayssinceepoch
-    if steps == dailytarget:
+    if steps == dailytadrget:
         cp.start_tone(1000)
         time.sleep(0.5)
         cp.stop_tone()
