@@ -1,3 +1,3 @@
 # petbit
-by Aradhana Sekar
+By: Aradhana Sekar
 
