@@ -1,5 +1,6 @@
 from adafruit_circuitplayground import cp
 import time
+# initialize variables
 steps = 0
 dailytarget = 10000
 dayssinceepoch = int(time.time()/86400)
@@ -55,3 +56,4 @@ while True:
         values[stepprogressled] = (0, 255, 0)
     for i in range (0, 10):
         cp.pixels[i] = values[i]
+
