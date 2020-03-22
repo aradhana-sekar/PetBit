@@ -9,6 +9,11 @@ def is_light_low():
 def update_low_light_values(values):
     # Assigned to Avani
     # update values with the color for low light
+    print("update low light")
+
+def play_sound():
+    # Assigned to Avani
+    # play sound here
 
 steps = 0
 dailytarget = 10000
@@ -54,9 +59,7 @@ while True:
         steps = 0
         dayssinceepoch = currentdayssinceepoch
     if steps == dailytarget:
-        cp.start_tone(1000)
-        time.sleep(0.5)
-        cp.stop_tone()
+        play_sound()
     if steps >= dailytarget:
         for i in range (0, 10):
             values[i] = (0, 15, 0)
