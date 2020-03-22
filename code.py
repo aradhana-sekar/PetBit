@@ -14,6 +14,7 @@ def update_low_light_values(values):
 def play_sound():
     # Assigned to Avani
     # play sound here
+    print("play sound")
 
 steps = 0
 dailytarget = 10000
