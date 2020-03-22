@@ -1,6 +1,15 @@
 from adafruit_circuitplayground import cp
 import time
-# initialize variables
+
+def is_light_low():
+    # Assigned to Avani
+    # consider checking cp.light
+    return False
+
+def update_low_light_values(values):
+    # Assigned to Avani
+    # update values with the color for low light
+
 steps = 0
 dailytarget = 10000
 dayssinceepoch = int(time.time()/86400)
@@ -31,9 +40,8 @@ while True:
         for i in range (0, steps*10/dailytarget):
             values[i] = (30, 0, 0)
     values[stepprogressled] = (0, 0, 30)
-    if cp.light < 6 and light == True:
-        for i in range(0, 10):
-            values[i] = (1, 1, 1)
+    if is_light_low() and light == True:
+        update_low_light_values(values)
     if cp.button_a:
         if light == True:
             light = False
@@ -53,7 +61,6 @@ while True:
         for i in range (0, 10):
             values[i] = (0, 15, 0)
         stepprogressled = steps % 10
-        values[stepprogressled] = (0, 255, 0)
+        values[stepprogressled] = (0, 70, 0)
     for i in range (0, 10):
         cp.pixels[i] = values[i]
-
