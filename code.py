@@ -12,7 +12,8 @@ def update_low_light_values(values):
     print("update low light")
 
 def play_sound():
-sdf    # play sound here
+    # Assigned to Avani
+    # play sound here
     print("play sound")
 
 steps = 0
@@ -44,8 +45,26 @@ while True:
     if steps < dailytarget:
         for i in range (0, steps*10/dailytarget):
             values[i] = (30, 0, 0)
+    values[stepprogressled] = (0, 0, 30)
+    if is_light_low() and light == True:
+        update_low_light_values(values)
+    if cp.button_a:
+        if light == True:
+            light = False
+        else:
+            light = True
+    if display == False:
+        values = [(0,0,0)]*10
     currentdayssinceepoch = int(time.time()/86400)
     if currentdayssinceepoch > dayssinceepoch:
         steps = 0
         dayssinceepoch = currentdayssinceepoch
-    if steps == dailyta
+    if steps == dailytarget:
+        play_sound()
+    if steps >= dailytarget:
+        for i in range (0, 10):
+            values[i] = (0, 15, 0)
+        stepprogressled = steps % 10
+        values[stepprogressled] = (0, 70, 0)
+    for i in range (0, 10):
+        cp.pixels[i] = values[i]
