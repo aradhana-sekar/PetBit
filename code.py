@@ -1,19 +1,15 @@
 from adafruit_circuitplayground import cp
 import time
-
 def is_light_low():
     if cp.light < 6:
         return True
-
 def update_low_light_values(values):
     for i in range (0, 10):
         values[i] = (1, 1, 1)
-
 def play_sound():
     cp.start_tone(1000)
     time.sleep(0.5)
     cp.stop_tone()
-
 steps = 0
 dailytarget = 10000
 dayssinceepoch = int(time.time()/86400)
