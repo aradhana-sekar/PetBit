@@ -2,19 +2,17 @@ from adafruit_circuitplayground import cp
 import time
 
 def is_light_low():
-    # Assigned to Avani
-    # consider checking cp.light
-    return False
+    if cp.light<6:
+        return True
 
 def update_low_light_values(values):
-    # Assigned to Avani
-    # update values with the color for low light
-    print("update low light")
+    for i in range (0,10):
+        values [i]=(1,1,1)
 
 def play_sound():
-    # Assigned to Avani
-    # play sound here
-    print("play sound")
+    cp.start_tone(1000)
+    time.sleep(0.5)
+    cp.stop_tone()
 
 steps = 0
 dailytarget = 10000
@@ -68,3 +66,4 @@ while True:
         values[stepprogressled] = (0, 70, 0)
     for i in range (0, 10):
         cp.pixels[i] = values[i]
+
