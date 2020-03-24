@@ -2,12 +2,12 @@ from adafruit_circuitplayground import cp
 import time
 
 def is_light_low():
-    if cp.light<6:
+    if cp.light < 6:
         return True
 
 def update_low_light_values(values):
-    for i in range (0,10):
-        values [i]=(1,1,1)
+    for i in range (0, 10):
+        values[i] = (1, 1, 1)
 
 def play_sound():
     cp.start_tone(1000)
@@ -25,16 +25,10 @@ while True:
     else:
         display = True
     if cp.touch_A1:
-        dailytarget = 5000
-    if cp.touch_A2:
         dailytarget = 10000
-    if cp.touch_A3:
-        dailytarget = 15000
-    if cp.touch_A4:
+    if cp.touch_A2:
         dailytarget = 20000
-    if cp.touch_A5:
-        dailytarget = 25000
-    if cp.touch_A6:
+    if cp.touch_A3:
         dailytarget = 30000
     if cp.shake(10):
         steps = steps + 1
@@ -66,4 +60,3 @@ while True:
         values[stepprogressled] = (0, 70, 0)
     for i in range (0, 10):
         cp.pixels[i] = values[i]
-
