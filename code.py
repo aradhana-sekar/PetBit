@@ -66,8 +66,8 @@ pulseArrayFan = array.array('H', [1296, 377, 1289, 384, 464, 1219, 1296, 379,
     384, 464, 1219, 1296, 378, 1288, 392, 456, 1234, 463, 1227, 460, 1230, 457, 1232, 464,
     1226, 461, 1227, 1288])
 
-
 while True:
+    values = [(0,0,0)]*10
     if cp.button_b:
         print("Button B Pressed!")
         if feature:
@@ -88,16 +88,19 @@ while True:
             print("It's", temp_f, ". Too hot! It's", maxTemp, ". Turning fan on now.")
             laskoFanInfrared()
             fanOn = True
-            cp.pixels.fill((0, 30, 30))
+            for i in range (0, 10):
+                values[i] = (0, 30, 0)
         if temp_f < maxTemp and fanOn:
             print("Not too hot!")
-            cp.pixels.fill((0, 0, 0))
+            for i in range (0, 10):
+                values[i] = (0, 0, 0)
             laskoFanInfrared()
             fanOn = False
         if cp.button_b:
             print("Turning off.")
             if fanOn:
-                cp.pixels.fill((0, 0, 0))
+                for i in range (0, 10):
+                    values[i] = (0, 0, 0)
                 laskoFanInfrared()
                 fanOn = False
             time.sleep(5)
@@ -116,7 +119,6 @@ while True:
         dailytarget = 30000
     if cp.shake(10):
         steps = steps + 1
-    values = [(0,0,0)]*10
     stepprogressled = steps % 10
     if steps < dailytarget:
         for i in range (0, steps*10/dailytarget):
@@ -144,4 +146,3 @@ while True:
         values[stepprogressled] = (0, 70, 0)
     for i in range (0, 10):
         cp.pixels[i] = values[i]
-        
