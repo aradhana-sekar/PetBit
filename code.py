@@ -20,7 +20,7 @@ def is_light_low():
     
 def update_low_light_values(values):
     for i in range (0, 10):
-        values[i] = (1, 1, 1)
+        values[i] = (10, 10, 10)
         
 def play_sound():
     cp.start_tone(1000)
@@ -74,7 +74,7 @@ while True:
             feature = False
         else:
             feature = True
-    while True and feature:
+    if feature == True:
         if cp.touch_A4:
             maxTemp = 60
         if cp.touch_A5:
