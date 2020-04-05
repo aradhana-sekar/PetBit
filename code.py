@@ -23,9 +23,7 @@ def update_low_light_values(values):
         values[i] = (10, 10, 10)
         
 def play_sound():
-    cp.start_tone(1000)
-    time.sleep(0.5)
-    cp.stop_tone()
+    cp.play_tone(1000, 5.0)
 
 def laskoFanInfrared():
     pulseIn.pause()  # pauses IR detection
@@ -88,21 +86,21 @@ while True:
             print("It's", temp_f, ". Too hot! It's", maxTemp, ". Turning fan on now.")
             laskoFanInfrared()
             fanOn = True
-            for i in range (0, 10):
-                values[i] = (0, 30, 0)
+            cp.pixels.fill = (30, 30, 0)
+            time.sleep(10)
+            cp.pixels.fill = (0, 0, 0)
         if temp_f < maxTemp and fanOn:
             print("Not too hot!")
-            for i in range (0, 10):
-                values[i] = (0, 0, 0)
             laskoFanInfrared()
             fanOn = False
         if cp.button_b:
             print("Turning off.")
             if fanOn:
-                for i in range (0, 10):
-                    values[i] = (0, 0, 0)
                 laskoFanInfrared()
                 fanOn = False
+            cp.pixels.fill = (0, 30, 30)
+            time.sleep(10)
+            cp.pixels.fill = (0, 0, 0)
             time.sleep(5)
             feature = False
             break
