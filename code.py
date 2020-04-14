@@ -20,7 +20,7 @@ def is_light_low():
     
 def update_low_light_values(values):
     for i in range (0, 10):
-        values[i] = (10, 10, 10)
+        values[i] = (1, 1, 1)
         
 def play_sound():
     cp.play_tone(1000, 5.0)
@@ -79,16 +79,18 @@ while True:
             maxTemp = 70
         if cp.touch_A6:
             maxTemp = 80
-        cp.pixels.brightness = 0.3
         temp_f = int(cp.temperature * (9 / 5) + 32)
         print(temp_f, maxTemp)
         if temp_f >= maxTemp and not fanOn:
             print("It's", temp_f, ". Too hot! It's", maxTemp, ". Turning fan on now.")
             laskoFanInfrared()
             fanOn = True
-            cp.pixels.fill = (30, 30, 0)
-            time.sleep(10)
-            cp.pixels.fill = (0, 0, 0)
+        if temp_f >= maxTemp:
+            cp.red_led = True
+            time.sleep(1)
+            cp.red_led = False
+        if temp_f < maxTemp:
+            cp.red_led = False
         if temp_f < maxTemp and fanOn:
             print("Not too hot!")
             laskoFanInfrared()
@@ -98,10 +100,6 @@ while True:
             if fanOn:
                 laskoFanInfrared()
                 fanOn = False
-            cp.pixels.fill = (0, 30, 30)
-            time.sleep(10)
-            cp.pixels.fill = (0, 0, 0)
-            time.sleep(5)
             feature = False
             break
         time.sleep(0.5)
