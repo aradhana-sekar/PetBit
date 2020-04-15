@@ -80,7 +80,6 @@ while True:
         if cp.touch_A6:
             maxTemp = 80
         temp_f = int(cp.temperature * (9 / 5) + 32)
-        print(temp_f, maxTemp)
         if temp_f >= maxTemp and not fanOn:
             print("It's", temp_f, ". Too hot! It's", maxTemp, ". Turning fan on now.")
             laskoFanInfrared()
@@ -101,7 +100,6 @@ while True:
                 laskoFanInfrared()
                 fanOn = False
             feature = False
-            break
         time.sleep(0.5)
     if cp.switch == True:
         display = False
@@ -123,6 +121,7 @@ while True:
     if is_light_low() and light == True:
         update_low_light_values(values)
     if cp.button_a:
+        print ("Button A Pressed!")
         if light == True:
             light = False
         else:
@@ -140,5 +139,7 @@ while True:
             values[i] = (0, 15, 0)
         stepprogressled = steps % 10
         values[stepprogressled] = (0, 70, 0)
+    print(temp_f, maxTemp)
+    print(steps, dailytarget)
     for i in range (0, 10):
         cp.pixels[i] = values[i]
