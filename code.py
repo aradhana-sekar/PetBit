@@ -1,3 +1,4 @@
+# importing needed libraries
 from adafruit_circuitplayground import cp
 import board
 import time
@@ -6,14 +7,19 @@ import array
 
 # create IR input, maximum of 100 bits.
 pulseIn = pulseio.PulseIn(board.IR_RX, maxlen=100, idle_state=True)
+
 # clears any artifacts
 pulseIn.clear()
+
+# resume IR pulse detection
 pulseIn.resume()
 
 # creates IR output pulse
 pwm = pulseio.PWMOut(board.IR_TX, frequency=38000, duty_cycle=2 ** 15)
 pulseOut = pulseio.PulseOut(pwm)    
 
+
+# created functions to organize our code, and make it more clear
 def is_light_low():
     if cp.light < 6:
         return True
@@ -30,13 +36,15 @@ def laskoFanInfrared():
     cp.red_led = True
     pulseOut.send(pulseArrayFan)  # sends IR pulse
     time.sleep(0.2)  # wait so pulses don't run together
-    pulseIn.clear()  # clear detected pulses to remove partial artifacts
+    pulseIn.clear()  # clear detected pulses
     cp.red_led = False
     pulseIn.resume()  # resumes IR detection
-    
+
+
+# create variables for the defaulted product  
 steps = 0
 dailytarget = 10000
-dayssinceepoch = int(time.time()/86400)
+dayssinceepoch = int(time.time()/86400)  # this shows the time since 1970
 display = True
 light = True
 fanOn = False
@@ -45,8 +53,7 @@ feature = True
 
 # array for pulse, this is the same pulse output when button a is pressed
 # inputs are compared against this same array
-# array.array('H'', [x]) must be used for IR pulse arrays when using pulseio
-# indented to multiple lines so its easier to see
+# array.array('H', [x]) must be used for IR pulse arrays when using pulseio
 pulseArrayFan = array.array('H', [1296, 377, 1289, 384, 464, 1219, 1296, 379,
     1287, 394, 464, 1226, 461, 1229, 458, 1233, 464, 1226, 462, 1229, 456, 1232,
     1293, 6922, 1294, 379, 1287, 385, 463, 1220, 1295, 379, 1287, 395, 464,
@@ -65,13 +72,17 @@ pulseArrayFan = array.array('H', [1296, 377, 1289, 384, 464, 1219, 1296, 379,
     1226, 461, 1227, 1288])
 
 while True:
-    values = [(0,0,0)]*10
+    values = [(0,0,0)]*10  # this makes sure that the neopixels don’t flash
+
+    # if button b is pressed, the infrared temperature feature turns on/off
     if cp.button_b:
         print("Button B Pressed!")
         if feature:
             feature = False
         else:
             feature = True
+
+    # if the owner has enabled the feature, this sets the maximum temperature the owner wants for their pet
     if feature == True:
         if cp.touch_A4:
             maxTemp = 60
@@ -79,17 +90,25 @@ while True:
             maxTemp = 70
         if cp.touch_A6:
             maxTemp = 80
+
+        # this sets the temperature to fahrenheit
         temp_f = int(cp.temperature * (9 / 5) + 32)
+
+        # if the temperature is too high and the owner wants the feature enabled, the infrared temperature feature will run
         if temp_f >= maxTemp and not fanOn:
-            print("It's", temp_f, ". Too hot! It's", maxTemp, ". Turning fan on now.")
+            print("It's", temp_f, ". Too hot! It's", maxTemp, ". Turning fan on now.")  # all print statements are a prototype of an app sending a text to owners
             laskoFanInfrared()
             fanOn = True
+
+        # if the temperature exceeds the maximum temperature the owner sets, the red led will flash
         if temp_f >= maxTemp:
             cp.red_led = True
             time.sleep(1)
             cp.red_led = False
         if temp_f < maxTemp:
             cp.red_led = False
+
+        # turns fan off under these circumstances
         if temp_f < maxTemp and fanOn:
             print("Not too hot!")
             laskoFanInfrared()
@@ -100,46 +119,76 @@ while True:
                 laskoFanInfrared()
                 fanOn = False
             feature = False
+      
+        # checks temperature every 0.5 seconds
         time.sleep(0.5)
-    if cp.switch == True:
-        display = False
-    else:
-        display = True
+
+        if cp.switch == True:  # if switch is true display is false
+            display = False
+        else:  # if the switch is false display is true
+            display = True
+
+    # this sets the daily target the owner wants for their pet
     if cp.touch_A1:
         dailytarget = 10000
     if cp.touch_A2:
         dailytarget = 20000
     if cp.touch_A3:
         dailytarget = 30000
+
+    # if a step is detected, the steps variable will increase by 1
     if cp.shake(10):
         steps = steps + 1
+
+    # the blue neopixel shows each step taken
     stepprogressled = steps % 10
+    values[stepprogressled] = (0, 0, 30)
+
+
+
+    # the blue neopixel is the percentage of steps done 
     if steps < dailytarget:
         for i in range (0, steps*10/dailytarget):
             values[i] = (30, 0, 0)
-    values[stepprogressled] = (0, 0, 30)
+
+    # calling out the functions for the low light feature
     if is_light_low() and light == True:
         update_low_light_values(values)
+
+    # if button a is pressed, the low light feature turns on/off
     if cp.button_a:
         print ("Button A Pressed!")
         if light == True:
             light = False
         else:
             light = True
+
+    # if display is false the neopixels are off, but still continues to count the steps
     if display == False:
         values = [(0,0,0)]*10
+
+    # measures the days since 1970 again
     currentdayssinceepoch = int(time.time()/86400)
+
+    # have the step count reset everyday
     if currentdayssinceepoch > dayssinceepoch:
         steps = 0
         dayssinceepoch = currentdayssinceepoch
+
+    # if the pet reaches the daily target, a sound will play
     if steps == dailytarget:
-        play_sound()
+        play_sound()  # calling out our function for sound
+
+    # neopixels will turn green to show the daily target has been reached to alert the owner if they didn’t hear the sound, but the steps will still be counted
     if steps >= dailytarget:
         for i in range (0, 10):
             values[i] = (0, 15, 0)
         stepprogressled = steps % 10
         values[stepprogressled] = (0, 70, 0)
+
     print(temp_f, maxTemp)
     print(steps, dailytarget)
+
+    # lights up the neopixels as per data in values
     for i in range (0, 10):
         cp.pixels[i] = values[i]
