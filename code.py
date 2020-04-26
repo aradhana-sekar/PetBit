@@ -96,7 +96,7 @@ while True:
 
         # if the temperature is too high and the owner wants the feature enabled, the infrared temperature feature will run
         if temp_f >= maxTemp and not fanOn:
-            print("It's", temp_f, ". Too hot! It's", maxTemp, ". Turning fan on now.")  # all print statements are a prototype of an app sending a text to owners
+            print("It's", temp_f, ". Too hot! The max temp is ", maxTemp, ". Turning fan on now.")  # all print statements are a prototype of an app sending a text to owners
             laskoFanInfrared()
             fanOn = True
 
