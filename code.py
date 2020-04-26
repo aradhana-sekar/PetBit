@@ -16,18 +16,18 @@ pulseIn.resume()
 
 # creates IR output pulse
 pwm = pulseio.PWMOut(board.IR_TX, frequency=38000, duty_cycle=2 ** 15)
-pulseOut = pulseio.PulseOut(pwm)    
+pulseOut = pulseio.PulseOut(pwm)
 
 
 # created functions to organize our code, and make it more clear
 def is_light_low():
     if cp.light < 6:
         return True
-    
+
 def update_low_light_values(values):
     for i in range (0, 10):
         values[i] = (1, 1, 1)
-        
+
 def play_sound():
     cp.play_tone(1000, 5.0)
 
@@ -35,20 +35,21 @@ def laskoFanInfrared():
     pulseIn.pause()  # pauses IR detection
     cp.red_led = True
     pulseOut.send(pulseArrayFan)  # sends IR pulse
+    cp.play_tone(750, 0.3)
     time.sleep(0.2)  # wait so pulses don't run together
     pulseIn.clear()  # clear detected pulses
     cp.red_led = False
     pulseIn.resume()  # resumes IR detection
 
 
-# create variables for the defaulted product  
+# create variables for the defaulted product
 steps = 0
 dailytarget = 10000
 dayssinceepoch = int(time.time()/86400)  # this shows the time since 1970
 display = True
 light = True
 fanOn = False
-maxTemp = 70
+maxTemp = 80
 feature = True
 
 # array for pulse, this is the same pulse output when button a is pressed
@@ -71,6 +72,11 @@ pulseArrayFan = array.array('H', [1296, 377, 1289, 384, 464, 1219, 1296, 379,
     384, 464, 1219, 1296, 378, 1288, 392, 456, 1234, 463, 1227, 460, 1230, 457, 1232, 464,
     1226, 461, 1227, 1288])
 
+# this sets the temperature to fahrenheit
+temp_f = int(cp.temperature * (9 / 5) + 32)
+print("Current temperature:", temp_f)
+print("Max temperature:", maxTemp)
+
 while True:
     values = [(0,0,0)]*10  # this makes sure that the neopixels don’t flash
 
@@ -86,10 +92,13 @@ while True:
     if feature == True:
         if cp.touch_A4:
             maxTemp = 60
+            print("The max temp has been changed to", maxTemp, "degrees") # all print statements are a prototype of an app sending a text to owners
         if cp.touch_A5:
             maxTemp = 70
+            print("The max temp has been changed to", maxTemp, "degrees")
         if cp.touch_A6:
             maxTemp = 80
+            print("The max temp has been changed to", maxTemp, "degrees")
 
         # this sets the temperature to fahrenheit
         temp_f = int(cp.temperature * (9 / 5) + 32)
@@ -101,16 +110,16 @@ while True:
             fanOn = True
 
         # if the temperature exceeds the maximum temperature the owner sets, the red led will flash
-        if temp_f >= maxTemp:
+        if fanOn:
             cp.red_led = True
             time.sleep(1)
             cp.red_led = False
-        if temp_f < maxTemp:
+        else:
             cp.red_led = False
 
         # turns fan off under these circumstances
-        if temp_f < maxTemp and fanOn:
-            print("Not too hot!")
+        if temp_f < maxTemp-1 and fanOn:
+            print("Not too hot! The temp is" , temp_f)
             laskoFanInfrared()
             fanOn = False
         if cp.button_b:
@@ -119,7 +128,7 @@ while True:
                 laskoFanInfrared()
                 fanOn = False
             feature = False
-      
+
         # checks temperature every 0.5 seconds
         time.sleep(0.5)
 
@@ -146,7 +155,7 @@ while True:
 
 
 
-    # the blue neopixel is the percentage of steps done 
+    # the blue neopixel is the percentage of steps done
     if steps < dailytarget:
         for i in range (0, steps*10/dailytarget):
             values[i] = (30, 0, 0)
@@ -186,8 +195,8 @@ while True:
         stepprogressled = steps % 10
         values[stepprogressled] = (0, 70, 0)
 
-    print(temp_f, maxTemp)
-    print(steps, dailytarget)
+    # print(temp_f, maxTemp)
+    # print(steps, dailytarget)
 
     # lights up the neopixels as per data in values
     for i in range (0, 10):
