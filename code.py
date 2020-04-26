@@ -18,7 +18,6 @@ pulseIn.resume()
 pwm = pulseio.PWMOut(board.IR_TX, frequency=38000, duty_cycle=2 ** 15)
 pulseOut = pulseio.PulseOut(pwm)
 
-
 # created functions to organize our code, and make it more clear
 def is_light_low():
     if cp.light < 6:
@@ -40,7 +39,6 @@ def laskoFanInfrared():
     pulseIn.clear()  # clear detected pulses
     cp.red_led = False
     pulseIn.resume()  # resumes IR detection
-
 
 # create variables for the defaulted product
 steps = 0
@@ -152,8 +150,6 @@ while True:
     # the blue neopixel shows each step taken
     stepprogressled = steps % 10
     values[stepprogressled] = (0, 0, 30)
-
-
 
     # the blue neopixel is the percentage of steps done
     if steps < dailytarget:
