@@ -89,13 +89,13 @@ while True:
     # if the owner has enabled the feature, this sets the maximum temperature the owner wants for their pet
     if feature == True:
         if cp.touch_A4:
-            maxTemp = 60
+            maxTemp = 70
             print("The max temp has been changed to", maxTemp, "degrees") # all print statements are a prototype of an app sending a text to owners
         if cp.touch_A5:
-            maxTemp = 70
+            maxTemp = 80
             print("The max temp has been changed to", maxTemp, "degrees")
         if cp.touch_A6:
-            maxTemp = 80
+            maxTemp = 90
             print("The max temp has been changed to", maxTemp, "degrees")
 
         # this sets the temperature to fahrenheit
