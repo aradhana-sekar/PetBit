@@ -138,10 +138,13 @@ while True:
     # this sets the daily target the owner wants for their pet
     if cp.touch_A1:
         dailytarget = 10000
+        print("The daily target has been changed to", dailytarget, "steps")
     if cp.touch_A2:
         dailytarget = 20000
+        print("The daily target has been changed to", dailytarget, "steps")
     if cp.touch_A3:
         dailytarget = 30000
+        print("The daily target has been changed to", dailytarget, "steps")
 
     # if a step is detected, the steps variable will increase by 1
     if cp.shake(10):
