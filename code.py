@@ -154,7 +154,7 @@ while True:
     stepprogressled = steps % 10
     values[stepprogressled] = (0, 0, 30)
 
-    # the blue neopixel is the percentage of steps done
+    # the red neopixel is the percentage of steps done
     if steps < dailytarget:
         for i in range (0, steps*10/dailytarget):
             values[i] = (30, 0, 0)
