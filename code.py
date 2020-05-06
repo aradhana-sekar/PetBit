@@ -150,14 +150,14 @@ while True:
     if cp.shake(10):
         steps = steps + 1
 
-    # the blue neopixel shows each step taken
-    stepprogressled = steps % 10
-    values[stepprogressled] = (0, 0, 30)
-
     # the red neopixel is the percentage of steps done
     if steps < dailytarget:
         for i in range (0, steps*10/dailytarget):
             values[i] = (30, 0, 0)
+            
+  # the blue neopixel shows each step taken
+    stepprogressled = steps % 10
+    values[stepprogressled] = (0, 0, 30)           
 
     # calling out the functions for the low light feature
     if is_light_low() and light == True:
